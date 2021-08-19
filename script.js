@@ -8,6 +8,7 @@ function getProducts() {
   fetch(websiteUrl.value + "products.json")
     .then((res) => res.json())
     .then((data) => {
+      websiteUrl.value = "";
       let shopItems = data.products;
       console.log(shopItems[0]);
       let result = `<h1>Products</h1>`;
