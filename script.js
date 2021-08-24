@@ -14,7 +14,8 @@ function getProducts() {
         result += `<ul class="product list">
           <li><img src =${product.images[0].src} height="100" width="100"></li> 
           <li>ID: ${product.id}</li>
-          <li>Name: ${product.title}</li>  
+          <li>Name: ${product.title}</li>
+          <li>URL: <a href="${websiteUrl.value}products/${product.handle}" target="_blank">${websiteUrl.value}products/${product.handle}</a></li>
         </ul>
         <h3>Sizes:</h3>
         `;
