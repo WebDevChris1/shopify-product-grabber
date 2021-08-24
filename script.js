@@ -1,7 +1,6 @@
 let websiteUrl = document.getElementById("website-url");
 const getProductsBtn = document.getElementById("get-products-btn");
 let output = document.getElementById("output");
-
 getProductsBtn.addEventListener("click", getProducts);
 
 function getProducts() {
@@ -10,31 +9,32 @@ function getProducts() {
     .then((data) => {
       let shopItems = data.products;
       console.log(shopItems[0]);
-      let result = `<h1>Products</h1>`;
+      let result = `<h1>Products</h1><h2>Website: <a href="${websiteUrl.value}" target="_blank">${websiteUrl.value}</a></h2>`;
       shopItems.forEach((product) => {
-        result += `<ul id="product-list">
-          <li><img src =${product.images[0].src} height="70" width="70"></li> 
+        result += `<ul class="product list">
+          <li><img src =${product.images[0].src} height="100" width="100"></li> 
           <li>ID: ${product.id}</li>
           <li>Name: ${product.title}</li>  
         </ul>
-        <h2>Sizes</h2>
+        <h3>Sizes:</h3>
         `;
-        for (let i = 0; i < shopItems.length; i++) {
-          for (let l = 0; l < product.variants.length; l++) {
-            result += `
-            <li><a href="${websiteUrl.value}/cart/${product.variants[l].id}:1">${product.variants[l].title}</a> - ${product.variants[l].id}</li>
-            `;
+        for (let i = 0; i < product.variants.length; i++) {
+          let availability = "";
+          if (product.variants[i].available === false) {
+            availability = `<p>Price: $${product.variants[i].price}<p class= "oos">OOS</p>`;
+          } else {
+            availability = `<p>Price: $${product.variants[i].price}<p class="in-stock">In Stock</p></p>`;
           }
+          result += `
+          <ul class="product sizes">
+            <li><a target="_blank" href="${websiteUrl.value}/cart/${product.variants[i].id}:1">${product.variants[i].title}</a> - ${product.variants[i].id} ${availability}</li>
+          </ul>`;
         }
       });
       output.innerHTML = result;
       websiteUrl.value = "";
-
-      // const productList = document.getElementById("product-list");
-      // for (let i = 0; i < shopItems.length; i++) {
-      //   productList.innerHTML += `<li>${shopItems.variants[i]}</li>`;
-      // }
-    });
+    })
+    .catch(() =>
+      alert(`Please Check your URL and Try Again (ex: https//www.kith.com/)`)
+    );
 }
-
-// <li>Name: ${product.variants[0].id}</li>;
