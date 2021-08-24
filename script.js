@@ -1,15 +1,23 @@
+// Grab Elements
 let websiteUrl = document.getElementById("website-url");
-const getProductsBtn = document.getElementById("get-products-btn");
+const getShopProductsBtn = document.getElementById("get-shopify-products-btn");
+const getSupProductsBtn = document.getElementById("get-sup-products-btn");
 let output = document.getElementById("output");
-getProductsBtn.addEventListener("click", getProducts);
+// Get Product Button Event Listener
+getShopProductsBtn.addEventListener("click", getShopProducts);
+getSupProductsBtn.addEventListener("click", getSupProducts);
 
-function getProducts() {
+// Get Product Function
+function getShopProducts() {
+  // Get product.json URL
   fetch(websiteUrl.value + "products.json")
     .then((res) => res.json())
     .then((data) => {
-      let shopItems = data.products;
-      console.log(shopItems[0]);
+      const shopItems = data.products;
+      // Test Product
+      // console.log(shopItems[0]);
       let result = `<h1>Products</h1><h2>Website: <a href="${websiteUrl.value}" target="_blank">${websiteUrl.value}</a></h2>`;
+      // Get Product Info
       shopItems.forEach((product) => {
         result += `<ul class="product list">
           <li><img src =${product.images[0].src} height="100" width="100"></li> 
@@ -19,6 +27,7 @@ function getProducts() {
         </ul>
         <h3>Sizes:</h3>
         `;
+        // Get Sizes
         for (let i = 0; i < product.variants.length; i++) {
           let availability = "";
           if (product.variants[i].available === false) {
@@ -32,10 +41,21 @@ function getProducts() {
           </ul>`;
         }
       });
+      // Append to Output Div
       output.innerHTML = result;
       websiteUrl.value = "";
     })
+    // Catch Error
     .catch(() =>
-      alert(`Please Check your URL and Try Again (ex: https//www.kith.com/)`)
+      alert(`Please Check your URL and Try Again (ex: https://www.kith.com/)`)
     );
+}
+
+function getSupProducts() {
+  fetch("https://www.supremenewyork.com/mobile_stock.json")
+    .then((res) => res.json())
+    .then((data) => {
+      let shopCategories = data.products_and_categories; // selects all catagories
+      console.log(shopCategories);
+    });
 }

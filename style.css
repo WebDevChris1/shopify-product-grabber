@@ -1,9 +1,11 @@
+/* Root */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
+/* General Styles */
 ul {
   list-style: none;
   padding: 10px;
@@ -41,6 +43,7 @@ button {
   cursor: pointer;
 }
 
+/* Availability Color*/
 .oos {
   color: red;
 }
@@ -49,6 +52,7 @@ button {
   color: green;
 }
 
+/* Error Color */
 .error-text {
   color: red;
 }
