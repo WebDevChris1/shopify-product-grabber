@@ -19,26 +19,44 @@ function getShopProducts() {
       let result = `<h1>Products</h1><h2>Website: <a href="${websiteUrl.value}" target="_blank">${websiteUrl.value}</a></h2>`;
       // Get Product Info
       shopItems.forEach((product) => {
+        let id = product.id;
+        let title = product.title;
+        let handle = product.handle;
+        let image = product.images[0].src;
+        let url = websiteUrl.value;
         result += `<ul class="product list">
-          <li><img src =${product.images[0].src} height="100" width="100"></li> 
-          <li>ID: ${product.id}</li>
-          <li>Name: ${product.title}</li>
-          <li>URL: <a href="${websiteUrl.value}products/${product.handle}" target="_blank">${websiteUrl.value}products/${product.handle}</a></li>
+          <li><img src =${image} height="100" width="100"></li> 
+          <li>ID: ${id}</li>
+          <li>Name: ${title}</li>
+          <li>URL: <a href="${url}products/${handle}" target="_blank">${url}products/${handle}</a></li>
         </ul>
         <h3>Sizes:</h3>
         `;
         // Get Sizes
         for (let i = 0; i < product.variants.length; i++) {
           let availability = "";
-          if (product.variants[i].available === false) {
-            availability = `<p>Price: $${product.variants[i].price}<p class= "oos">OOS</p>`;
+          let variantPrice = product.variants[i].price;
+          let variantId = product.variants[i].id;
+          let variantTitle = product.variants[i].title;
+          let variantAvailability = product.variants[i].available;
+          if (variantAvailability === false) {
+            availability = `<p>Price: $${variantPrice}<p class= "oos">OOS</p>`;
           } else {
-            availability = `<p>Price: $${product.variants[i].price}<p class="in-stock">In Stock</p></p>`;
+            availability = `<p>Price: $${variantPrice}<p class="in-stock">In Stock</p></p>`;
           }
-          result += `
+          // Check for One Size
+          if (variantTitle === "Default Title") {
+            variantTitle = "OS";
+            result += `
           <ul class="product sizes">
-            <li><a target="_blank" href="${websiteUrl.value}/cart/${product.variants[i].id}:1">${product.variants[i].title}</a> - ${product.variants[i].id} ${availability}</li>
+            <li><a target="_blank" href="${url}/cart/${variantId}:1">${variantTitle}</a> - ${variantId} ${availability}</li>
           </ul>`;
+          } else {
+            result += `
+          <ul class="product sizes">
+            <li><a target="_blank" href="${url}/cart/${variantId}:1">${variantTitle}</a> - ${variantId} ${availability}</li>
+          </ul>`;
+          }
         }
       });
       // Append to Output Div
@@ -52,10 +70,25 @@ function getShopProducts() {
 }
 
 function getSupProducts() {
+  alert("Supreme Product Grabber Still in Production");
   fetch("https://www.supremenewyork.com/mobile_stock.json")
     .then((res) => res.json())
     .then((data) => {
       let shopCategories = data.products_and_categories; // selects all catagories
       console.log(shopCategories);
+      let result = `<h1>Products</h1><h2>Website: <a href="https://www.supremenewyork.com/" target="_blank">https://www.supremenewyork.com/</a></h2>`;
+      shopCategories["T-Shirts"].forEach((product) => {
+        result += `
+        <ul>
+          <li><img src="https:${product.image_url_hi}" height="100" width="100"></li>
+          <li>Name: ${product.name}</li>
+          <li>Price: $${product.price}</li>
+          <li>Category: ${product.category_name}</li>
+          <li>ID: ${product.id}</li>
+          <li>New Item: ${product.new_item}</li>
+        </ul>`;
+      });
+
+      output.innerHTML = result;
     });
 }
